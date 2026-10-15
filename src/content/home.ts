@@ -8,7 +8,7 @@ import { PROOF } from './proof'
 
 export const hero = {
   eyebrow: 'Now in Slack and Microsoft Teams',
-  title: 'Your crew, plus one.',
+  title: 'Not a tool but a hire.',
   sub: 'Crewhir is an AI teammate that lives in Slack and Microsoft Teams. Connect your tools, ask in plain words, and get finished work back: reports, dashboards, code and campaigns.',
   primary: 'Start free',
   secondary: 'Book a demo',
