@@ -104,7 +104,7 @@ export const privacyPolicy: LegalDocument = {
         ),
         h3('1.8. Cookies and Analytics'),
         p(
-          'We use cookies and similar technologies (such as your browser\'s local storage) to operate the application, for example to keep you signed in. Our marketing website uses Vercel Web Analytics, which counts page views without cookies and without identifying you.',
+          "We use cookies and similar technologies (such as your browser's local storage) to operate the application, for example to keep you signed in. Our marketing website uses Vercel Web Analytics, which counts page views without cookies and without identifying you.",
         ),
         p('The following third-party services may set cookies when you use the parts of the service they provide:'),
         ul(
@@ -149,7 +149,9 @@ export const privacyPolicy: LegalDocument = {
           'For marketing about our products, which you may opt out of at any time.',
           'To comply with our legal obligations and resolve disputes.',
         ),
-        p('We do not use Customer Data (the messages, files and connected-tool data described in Sections 1.4 to 1.6) for advertising.'),
+        p(
+          'We do not use Customer Data (the messages, files and connected-tool data described in Sections 1.4 to 1.6) for advertising.',
+        ),
       ],
     },
     {
@@ -185,7 +187,7 @@ export const privacyPolicy: LegalDocument = {
       blocks: [
         ul(
           "Members of a workspace see each other's name, email address and role, and can see the requests, threads and outputs in the channels they share with Crewhir.",
-          'Workspace admins can see the workspace\'s connected tools, approval settings, usage and activity log.',
+          "Workspace admins can see the workspace's connected tools, approval settings, usage and activity log.",
           `Where an organisation uses ${name} for its staff, the organisation decides how ${name} is used with its data. For the Customer Data in its workspace, that organisation is the controller and ${company} processes it on the organisation's behalf. A data processing agreement is available on request at ${supportEmail}.`,
         ),
       ],
@@ -281,7 +283,7 @@ export const privacyPolicy: LegalDocument = {
         ul(
           'Encryption in transit (TLS) and at rest (AES-256), including the tokens and keys for connected tools.',
           'Isolation between workspaces.',
-          'Role-based access controls and multi-factor authentication for our staff\'s access to production systems.',
+          "Role-based access controls and multi-factor authentication for our staff's access to production systems.",
           'Audit logs of access and of the actions Crewhir takes.',
           'Regular security assessments and updates.',
         ),
@@ -307,7 +309,7 @@ export const privacyPolicy: LegalDocument = {
           'Right to withdraw consent: where processing is based on consent, to withdraw it at any time.',
         ),
         p(
-          'If you live in a US state with a consumer privacy law, you may have the right to know and access the personal information we hold about you, to correct it, to delete it, and to opt out of its sale or use for targeted advertising (we do neither). We respond within 45 days. If we decline your request, you may appeal by replying to our decision, and we will respond to the appeal within the time the law sets. You may use an authorised agent, and we may ask for proof of the agent\'s authority. We will not discriminate against you for exercising these rights.',
+          "If you live in a US state with a consumer privacy law, you may have the right to know and access the personal information we hold about you, to correct it, to delete it, and to opt out of its sale or use for targeted advertising (we do neither). We respond within 45 days. If we decline your request, you may appeal by replying to our decision, and we will respond to the appeal within the time the law sets. You may use an authorised agent, and we may ask for proof of the agent's authority. We will not discriminate against you for exercising these rights.",
         ),
         p(
           `To exercise any of these rights, contact us at ${supportEmail}. UK and EEA requests are answered within one month. Where your data is in an organisation's workspace (Section 6), we may refer your request to that organisation's administrator.`,
@@ -811,14 +813,20 @@ export const refundPolicy: LegalDocument = {
           'Unsatisfactory experience after payment.',
           'Duplicate subscriptions purchased by the user.',
         ),
-        p(`All payments made to ${name} outside the initial 14-day window are final, non-refundable, and non-transferable.`),
-        p(`By subscribing to ${name}, you acknowledge and accept that all processed payments are binding and non-refundable.`),
+        p(
+          `All payments made to ${name} outside the initial 14-day window are final, non-refundable, and non-transferable.`,
+        ),
+        p(
+          `By subscribing to ${name}, you acknowledge and accept that all processed payments are binding and non-refundable.`,
+        ),
       ],
     },
     {
       heading: '2. Managing Your Subscription and Avoiding Future Billing',
       blocks: [
-        p('You may cancel your subscription at any time through your account settings to prevent future renewal charges.'),
+        p(
+          'You may cancel your subscription at any time through your account settings to prevent future renewal charges.',
+        ),
         p('Cancellation stops future billing only.'),
         ul(
           'To avoid being charged for the next billing cycle, you must cancel your subscription before your next renewal date.',

@@ -60,7 +60,8 @@
 
   --ease-crew: cubic-bezier(0.22, 1, 0.36, 1);
 
-  --animate-marquee: marquee 48s linear infinite;
+  --animate-marquee: marquee 56s linear infinite;
+  --animate-marquee-reverse: marquee 56s linear infinite reverse;
   --animate-typing: typing 1.2s ease-in-out infinite;
 
   @keyframes marquee {

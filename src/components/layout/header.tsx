@@ -1,7 +1,7 @@
 import { ListIcon, XIcon } from '@phosphor-icons/react'
-import { Dialog, NavigationMenu } from 'radix-ui'
+import { Dialog } from 'radix-ui'
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router'
+import { Link } from '@/lib/router'
 import { Logo } from '@/components/brand/logo'
 import { Button } from '@/components/ui/button'
 import { Container } from '@/components/ui/layout'
@@ -33,20 +33,21 @@ export function Header() {
           <Logo />
         </Link>
 
-        <NavigationMenu.Root aria-label="Main" className="hidden lg:block">
-          <NavigationMenu.List className="flex items-center gap-1">
+        {/* Five flat anchors: a plain list. Swap in Radix NavigationMenu when dropdowns arrive. */}
+        <nav aria-label="Main" className="hidden lg:block">
+          <ul className="flex items-center gap-1">
             {NAV.map((item) => (
-              <NavigationMenu.Item key={item.href}>
-                <NavigationMenu.Link
+              <li key={item.href}>
+                <a
                   href={item.href}
                   className="inline-flex min-h-11 items-center rounded-full px-4 text-small font-medium text-slate transition-colors duration-200 hover:bg-sand hover:text-harbor"
                 >
                   {item.label}
-                </NavigationMenu.Link>
-              </NavigationMenu.Item>
+                </a>
+              </li>
             ))}
-          </NavigationMenu.List>
-        </NavigationMenu.Root>
+          </ul>
+        </nav>
 
         <div className="hidden items-center gap-2 lg:flex">
           <Button asChild variant="ghost">

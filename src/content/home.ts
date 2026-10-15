@@ -2,6 +2,8 @@
  * Landing page copy (plan §6). Voice rules: sentence case, no exclamation
  * marks, verbs first, none of the banned words in plan §9.
  */
+import type { LogoSlug } from '@/lib/assets'
+import type { PersonId } from './people'
 import { PROOF } from './proof'
 
 export const hero = {
@@ -26,38 +28,63 @@ export type ChatPlatform = 'slack' | 'teams'
 export const heroChat = {
   company: 'Lumen Bikes',
   channel: 'growth',
+  topic: 'Paid, lifecycle and launch numbers',
+  /** Sidebar contents for the Slack and Teams windows. */
+  channels: ['general', 'growth', 'leadership', 'product', 'support'],
+  directMessages: ['daniel', 'priya', 'sam'] satisfies PersonId[],
+  members: ['maya', 'leo', 'priya', 'daniel'] satisfies PersonId[],
   request: {
-    name: 'Maya',
-    role: 'Head of Growth',
+    from: 'maya' as PersonId,
+    time: '9:14 AM',
     text: "pull last month's ad spend by channel and flag anything over budget",
   },
+  ackTime: '9:14 AM',
   ack: 'On it. Pulling from Google Ads, Meta and your budget sheet.',
-  tools: ['Google Ads', 'Meta Ads', 'Budget sheet'],
+  tools: [
+    { name: 'Google Ads', logo: 'google-ads' },
+    { name: 'Meta Ads', logo: 'meta' },
+    { name: 'Budget sheet', logo: 'google-drive' },
+  ] satisfies { name: string; logo: LogoSlug }[],
+  doneTime: '9:17 AM',
   done: 'Done. Spend was $48,210 against a $45,000 budget. Two campaigns ran over.',
-  file: { name: 'ad-spend-audit-sep.pdf', meta: '6 pages' },
+  file: { name: 'ad-spend-audit-sep.pdf', meta: '6 pages · PDF' },
   approval: {
+    title: 'Approval needed',
     text: ['Pause ', 'Retargeting – Broad', ' and ', 'Lookalike 3%', ' until Monday?'],
+    detail: 'Saves about $1,900 this week · Meta Ads',
     approve: 'Approve',
     review: 'Review first',
   },
 }
 
-/** Integrations named in the plan. Only `live` ones are shown (plan Q5). */
-export const integrations: { name: string; live: boolean }[] = [
-  { name: 'Slack', live: true },
-  { name: 'Microsoft Teams', live: true },
-  { name: 'Google Workspace', live: false },
-  { name: 'Google Ads', live: false },
-  { name: 'Notion', live: false },
-  { name: 'Stripe', live: false },
-  { name: 'GitHub', live: false },
-  { name: 'HubSpot', live: false },
-  { name: 'Linear', live: false },
-  { name: 'Jira', live: false },
-  { name: 'Salesforce', live: false },
-  { name: 'Shopify', live: false },
-  { name: 'Airtable', live: false },
-  { name: 'Meta Ads', live: false },
+/**
+ * Integrations shown in the "works with" strip, the pillars and the use cases.
+ * Set `live: false` for anything that won't ship at launch (plan Q5).
+ */
+export const integrations: { name: string; logo: LogoSlug; live: boolean }[] = [
+  { name: 'Slack', logo: 'slack', live: true },
+  { name: 'Microsoft Teams', logo: 'teams', live: true },
+  { name: 'Gmail', logo: 'gmail', live: true },
+  { name: 'Google Drive', logo: 'google-drive', live: true },
+  { name: 'Google Calendar', logo: 'google-calendar', live: true },
+  { name: 'Google Ads', logo: 'google-ads', live: true },
+  { name: 'Google Analytics', logo: 'google-analytics', live: true },
+  { name: 'Meta Ads', logo: 'meta', live: true },
+  { name: 'Notion', logo: 'notion', live: true },
+  { name: 'Stripe', logo: 'stripe', live: true },
+  { name: 'GitHub', logo: 'github', live: true },
+  { name: 'HubSpot', logo: 'hubspot', live: true },
+  { name: 'Linear', logo: 'linear', live: true },
+  { name: 'Jira', logo: 'jira', live: true },
+  { name: 'Salesforce', logo: 'salesforce', live: true },
+  { name: 'Shopify', logo: 'shopify', live: true },
+  { name: 'Airtable', logo: 'airtable', live: true },
+  { name: 'Figma', logo: 'figma', live: true },
+  { name: 'Intercom', logo: 'intercom', live: true },
+  { name: 'Zendesk', logo: 'zendesk', live: true },
+  { name: 'Asana', logo: 'asana', live: true },
+  { name: 'Dropbox', logo: 'dropbox', live: true },
+  { name: 'Xero', logo: 'xero', live: true },
 ]
 
 export const worksWith = {
@@ -114,9 +141,13 @@ export const pillars = {
     },
   ] as const,
   vignettes: {
-    tools: ['Query run', 'Sheet built', 'Change shipped'],
-    connected: ['CRM', 'Ads', 'Docs', 'Code'],
-    note: { label: 'Learned', text: 'Monday reports go to #leadership' },
+    tools: [
+      { label: 'Query run', logo: 'google-analytics' },
+      { label: 'Sheet built', logo: 'google-drive' },
+      { label: 'Change shipped', logo: 'github' },
+    ] satisfies { label: string; logo: LogoSlug }[],
+    connected: ['salesforce', 'google-ads', 'notion', 'github', 'linear', 'gmail'] satisfies LogoSlug[],
+    note: { label: 'Learned', text: 'Monday reports go to #leadership', from: 'daniel' as PersonId },
   },
 }
 
@@ -151,14 +182,22 @@ export const useCases = {
       id: 'founders',
       label: 'Founders',
       items: [
-        { title: 'Daily numbers in Slack', body: 'Revenue, signups and burn posted every morning, with what changed and why.' },
+        {
+          title: 'Daily numbers in Slack',
+          body: 'Revenue, signups and burn posted every morning, with what changed and why.',
+        },
         { title: 'Investor updates', body: 'A monthly draft pulled from your metrics, ready for you to edit.' },
         { title: 'Outbound', body: 'Lead lists researched and sequences drafted for your review.' },
         { title: 'Internal tools', body: 'Describe the tool, get a working web app and a link.' },
       ],
+      tools: ['stripe', 'google-drive', 'notion', 'hubspot'],
       thread: {
+        platform: 'slack',
+        channel: 'leadership',
+        from: 'daniel',
         ask: 'draft the October investor update',
         reply: "Draft's ready: MRR +8%, 3 new logos, runway 19 months. Doc linked.",
+        attachment: { logo: 'notion', title: 'October investor update', meta: 'Notion · Draft' },
       },
     },
     {
@@ -170,9 +209,14 @@ export const useCases = {
         { title: 'Lead sourcing', body: 'Target accounts found and enriched in your CRM.' },
         { title: 'Reports', body: 'A weekly PDF your leadership will actually read.' },
       ],
+      tools: ['google-ads', 'meta', 'google-analytics', 'hubspot'],
       thread: {
+        platform: 'slack',
+        channel: 'marketing',
+        from: 'priya',
         ask: 'which channel had the cheapest signups last week?',
         reply: 'Search: $18 per signup, down 12%. Meta: $31. Chart attached.',
+        attachment: { logo: 'google-analytics', title: 'cost-per-signup-wk41.png', meta: 'Chart · 2 channels' },
       },
     },
     {
@@ -184,9 +228,18 @@ export const useCases = {
         { title: 'Internal tools', body: 'Full-stack apps for the team, built and deployed.' },
         { title: 'Incident follow-up', body: 'Timelines written and action items chased until closed.' },
       ],
+      tools: ['github', 'linear', 'jira', 'figma'],
       thread: {
+        platform: 'teams',
+        channel: 'Engineering',
+        from: 'sam',
         ask: 'the export button 500s on large workspaces',
         reply: 'Found it: the query has no pagination. PR #482 is open for review.',
+        attachment: {
+          logo: 'github',
+          title: 'Paginate workspace export query #482',
+          meta: 'lumen-bikes/app · +48 −12',
+        },
       },
     },
     {
@@ -198,16 +251,29 @@ export const useCases = {
         { title: 'Forecasts', body: 'Refreshed on schedule when new actuals land.' },
         { title: 'Cross-team nudges', body: 'Owners reminded and data synced between tools.' },
       ],
+      tools: ['xero', 'salesforce', 'google-drive', 'stripe'],
       thread: {
+        platform: 'teams',
+        channel: 'Finance',
+        from: 'marcus',
         ask: 'refresh the Q4 forecast with September actuals',
         reply: 'Updated. Revenue tracking 3% under plan, mostly from the delayed enterprise deal. Sheet linked.',
+        attachment: { logo: 'google-drive', title: 'Q4 forecast v7', meta: 'Google Sheets · Updated just now' },
       },
     },
   ] satisfies {
     id: TeamId
     label: string
     items: { title: string; body: string }[]
-    thread: { ask: string; reply: string }
+    tools: LogoSlug[]
+    thread: {
+      platform: ChatPlatform
+      channel: string
+      from: PersonId
+      ask: string
+      reply: string
+      attachment: { logo: LogoSlug; title: string; meta: string }
+    }
   }[],
 }
 
@@ -230,11 +296,11 @@ export const control = {
     },
   ] as const,
   log: [
-    { time: '09:14', text: 'Maya asked for an ad spend audit', who: 'Requested' },
-    { time: '09:16', text: 'Read Google Ads, Meta Ads, Budget sheet', who: 'Crewhir' },
-    { time: '09:17', text: 'Posted ad-spend-audit-sep.pdf to #growth', who: 'Crewhir' },
-    { time: '09:21', text: 'Paused 2 campaigns', who: 'Approved by Maya' },
-  ],
+    { time: '09:14', text: 'Asked for an ad spend audit', who: 'Maya Chen', actor: 'maya' },
+    { time: '09:16', text: 'Read Google Ads, Meta Ads, Budget sheet', who: 'Crewhir', actor: 'crewhir' },
+    { time: '09:17', text: 'Posted ad-spend-audit-sep.pdf to #growth', who: 'Crewhir', actor: 'crewhir' },
+    { time: '09:21', text: 'Paused 2 campaigns', who: 'Approved by Maya Chen', actor: 'maya' },
+  ] satisfies { time: string; text: string; who: string; actor: PersonId | 'crewhir' }[],
 }
 
 /** Every claim must match the Privacy Policy (legal plan §3). */
@@ -281,9 +347,9 @@ export const askAi = {
   sub: 'Open your assistant with this question already filled in.',
   prompt: ASK_PROMPT,
   links: [
-    { label: 'Ask ChatGPT', href: `https://chatgpt.com/?q=${q}` },
-    { label: 'Ask Claude', href: `https://claude.ai/new?q=${q}` },
-    { label: 'Ask Perplexity', href: `https://www.perplexity.ai/search?q=${q}` },
+    { label: 'Ask ChatGPT', logo: 'openai' as LogoSlug, href: `https://chatgpt.com/?q=${q}` },
+    { label: 'Ask Claude', logo: 'claude' as LogoSlug, href: `https://claude.ai/new?q=${q}` },
+    { label: 'Ask Perplexity', logo: 'perplexity' as LogoSlug, href: `https://www.perplexity.ai/search?q=${q}` },
   ],
 }
 

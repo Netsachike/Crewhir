@@ -1,17 +1,6 @@
-import { createTV } from 'tailwind-variants'
-
 /**
- * `tv` with tailwind-merge taught about the custom type scale, so
- * `text-section` and `text-foam` aren't treated as the same class group.
+ * The lite build: variants and slots without tailwind-merge (about 20 KB
+ * gzipped saved). Components never pass a className that conflicts with
+ * their base classes; use a variant instead.
  */
-export const tv = createTV({
-  twMergeConfig: {
-    extend: {
-      theme: {
-        text: ['hero', 'section', 'title', 'lead', 'body', 'small', 'eyebrow'],
-      },
-    },
-  },
-})
-
-export type { VariantProps } from 'tailwind-variants'
+export { tv, type VariantProps } from 'tailwind-variants/lite'

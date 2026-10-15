@@ -1,12 +1,15 @@
 import { ArrowRightIcon } from '@phosphor-icons/react'
 import { useRef } from 'react'
+import { IntegrationLogo } from '@/components/brand/integration-logo'
 import { LogoMark } from '@/components/brand/logo'
+import { people } from '@/content/people'
+import { avatarUrl } from '@/lib/assets'
 import { HandoffTick } from '@/components/mockups/parts'
 import { Button } from '@/components/ui/button'
 import { Container, Section, SectionHeading } from '@/components/ui/layout'
 import { Reveal } from '@/components/ui/reveal'
 import { comparison, howItWorks, pillars } from '@/content/home'
-import { gsap, MOTION_OK, useGSAP } from '@/lib/gsap'
+import { useMotion } from '@/lib/motion'
 import { LINKS } from '@/lib/site'
 
 /** A real table from md up; stacked cards below (plan §6.4). */
@@ -85,34 +88,81 @@ function Vignette({ kind }: { kind: (typeof pillars.items)[number]['vignette'] }
     return (
       <div className="flex flex-col gap-2">
         {v.tools.map((t) => (
-          <span key={t} className="flex items-center justify-between rounded-lg border border-rope bg-white px-3 py-2 font-mono text-xs text-harbor">
-            {t}
-            <HandoffTick size={14} />
+          <span
+            key={t.label}
+            className="flex items-center gap-2.5 rounded-lg border border-rope bg-white px-3 py-2 text-small font-medium text-harbor"
+          >
+            <IntegrationLogo slug={t.logo} size={18} />
+            {t.label}
+            <HandoffTick size={16} className="ml-auto" />
           </span>
         ))}
       </div>
     )
   }
   if (kind === 'connected') {
+    // A hub: Crewhir in the middle, connected tools around it.
+    const r = 38
     return (
-      <div className="relative flex h-full min-h-28 items-center justify-center">
-        <div className="grid grid-cols-2 gap-2">
-          {v.connected.map((t) => (
-            <span key={t} className="rounded-lg border border-rope bg-white px-3 py-2 text-center font-mono text-xs text-harbor">
-              {t}
+      <div className="relative mx-auto aspect-square w-full max-w-44">
+        <svg viewBox="-50 -50 100 100" className="absolute inset-0 size-full text-rope-dark" aria-hidden="true">
+          {v.connected.map((_, i) => {
+            const a = (i / v.connected.length) * Math.PI * 2 - Math.PI / 2
+            return (
+              <line
+                key={i}
+                x1="0"
+                y1="0"
+                x2={Math.cos(a) * r}
+                y2={Math.sin(a) * r}
+                stroke="currentColor"
+                strokeWidth="0.8"
+                strokeDasharray="2 2"
+              />
+            )
+          })}
+        </svg>
+        {v.connected.map((slug, i) => {
+          const a = (i / v.connected.length) * Math.PI * 2 - Math.PI / 2
+          return (
+            <span
+              key={slug}
+              className="absolute grid size-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-xl border border-rope bg-white shadow-soft"
+              style={{ left: `${50 + Math.cos(a) * r}%`, top: `${50 + Math.sin(a) * r}%` }}
+            >
+              <IntegrationLogo slug={slug} size={20} />
             </span>
-          ))}
-        </div>
-        <span className="absolute grid size-10 place-items-center rounded-xl bg-harbor shadow-soft">
-          <LogoMark tone="reversed" size={24} />
+          )
+        })}
+        <span className="absolute top-1/2 left-1/2 grid size-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-2xl bg-harbor shadow-soft">
+          <LogoMark tone="reversed" size={28} />
         </span>
       </div>
     )
   }
   return (
-    <div className="rounded-lg border border-rope bg-white p-3">
-      <p className="text-xs font-semibold tracking-wide text-crew uppercase">{v.note.label}</p>
-      <p className="mt-1 text-small text-harbor">{v.note.text}</p>
+    <div className="flex flex-col gap-2">
+      <div className="flex items-start gap-2.5 rounded-lg border border-rope bg-white p-3">
+        <img
+          src={avatarUrl(people[v.note.from].avatar)}
+          alt=""
+          width={28}
+          height={28}
+          loading="lazy"
+          className="size-7 rounded-full object-cover"
+        />
+        <p className="text-small text-harbor">
+          <span className="font-semibold">{people[v.note.from].name.split(' ')[0]}</span>: "Send the Monday numbers to
+          leadership, not here."
+        </p>
+      </div>
+      <div className="rounded-lg border border-crew/30 bg-mint/60 p-3">
+        <p className="flex items-center gap-1.5 text-xs font-semibold tracking-wide text-crew-deep uppercase">
+          <LogoMark size={14} />
+          {v.note.label}
+        </p>
+        <p className="mt-1 text-small text-harbor">{v.note.text}</p>
+      </div>
     </div>
   )
 }
@@ -142,25 +192,18 @@ export function Pillars() {
 export function HowItWorks() {
   const ref = useRef<HTMLOListElement>(null)
 
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia()
-      mm.add(MOTION_OK, () => {
-        gsap.fromTo(
-          '[data-line]',
-          { scaleX: 0, scaleY: 0 },
-          {
-            scaleX: 1,
-            scaleY: 1,
-            ease: 'none',
-            scrollTrigger: { trigger: ref.current, start: 'top 75%', end: 'bottom 55%', scrub: 0.6 },
-          },
-        )
-      })
-      return () => mm.revert()
-    },
-    { scope: ref },
-  )
+  useMotion(ref, ({ gsap }, root) => {
+    gsap.fromTo(
+      '[data-line]',
+      { scaleX: 0, scaleY: 0 },
+      {
+        scaleX: 1,
+        scaleY: 1,
+        ease: 'none',
+        scrollTrigger: { trigger: root, start: 'top 75%', end: 'bottom 55%', scrub: 0.6 },
+      },
+    )
+  })
 
   return (
     <Section id="how-it-works" aria-labelledby="how-title">

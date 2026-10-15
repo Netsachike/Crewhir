@@ -63,14 +63,25 @@ for (const [name, stroke] of [
   ['mark-reversed', C.foam],
   ['mark-on-green', '#FFFFFF'],
 ]) {
-  await writeFile(join(brandDir, `${name}.svg`), `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">${mark(stroke)}</svg>\n`)
+  await writeFile(
+    join(brandDir, `${name}.svg`),
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">${mark(stroke)}</svg>\n`,
+  )
 }
 
 // Open Graph card: Harbor, grain, reversed lockup, "Consider it done."
 const font = (pkg, file) => readFile(require.resolve(`${pkg}/files/${file}`))
 const fonts = [
-  { name: 'Bricolage', data: await font('@fontsource/bricolage-grotesque', 'bricolage-grotesque-latin-700-normal.woff'), weight: 700 },
-  { name: 'Instrument', data: await font('@fontsource/instrument-sans', 'instrument-sans-latin-500-normal.woff'), weight: 500 },
+  {
+    name: 'Bricolage',
+    data: await font('@fontsource/bricolage-grotesque', 'bricolage-grotesque-latin-700-normal.woff'),
+    weight: 700,
+  },
+  {
+    name: 'Instrument',
+    data: await font('@fontsource/instrument-sans', 'instrument-sans-latin-500-normal.woff'),
+    weight: 500,
+  },
 ]
 const markUri = `data:image/svg+xml;base64,${Buffer.from(
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">${mark(C.foam)}</svg>`,
@@ -102,8 +113,16 @@ const og = await satori(
         h('div', { fontFamily: 'Bricolage', fontSize: 52, letterSpacing: -1.5 }, 'crewhir'),
       ]),
       h('div', { display: 'flex', flexDirection: 'column' }, [
-        h('div', { display: 'flex', fontFamily: 'Bricolage', fontSize: 116, letterSpacing: -3, lineHeight: 1.1 }, 'Consider it done.'),
-        h('div', { display: 'flex', marginTop: 20, fontSize: 32, color: C.foam2 }, 'The AI teammate in Slack and Microsoft Teams'),
+        h(
+          'div',
+          { display: 'flex', fontFamily: 'Bricolage', fontSize: 116, letterSpacing: -3, lineHeight: 1.1 },
+          'Consider it done.',
+        ),
+        h(
+          'div',
+          { display: 'flex', marginTop: 20, fontSize: 32, color: C.foam2 },
+          'The AI teammate in Slack and Microsoft Teams',
+        ),
       ]),
     ],
   ),

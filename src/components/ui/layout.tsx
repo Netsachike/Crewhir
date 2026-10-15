@@ -8,8 +8,11 @@ export function Container({ className, ...props }: ComponentPropsWithRef<'div'>)
 }
 
 const section = tv({
-  base: 'py-20 sm:py-24 lg:py-32',
   variants: {
+    size: {
+      lg: 'py-20 sm:py-24 lg:py-32',
+      md: 'py-16 sm:py-20 lg:py-24',
+    },
     tone: {
       paper: '',
       white: 'bg-white',
@@ -17,13 +20,16 @@ const section = tv({
       harbor: 'on-dark grain bg-harbor text-foam',
     },
   },
-  defaultVariants: { tone: 'paper' },
+  defaultVariants: { tone: 'paper', size: 'lg' },
 })
 
-type SectionProps = ComponentPropsWithRef<'section'> & { tone?: 'paper' | 'white' | 'sand' | 'harbor' }
+type SectionProps = ComponentPropsWithRef<'section'> & {
+  tone?: 'paper' | 'white' | 'sand' | 'harbor'
+  size?: 'lg' | 'md'
+}
 
-export function Section({ tone, className, ...props }: SectionProps) {
-  return <section className={section({ tone, className })} {...props} />
+export function Section({ tone, size, className, ...props }: SectionProps) {
+  return <section className={section({ tone, size, className })} {...props} />
 }
 
 const eyebrow = tv({

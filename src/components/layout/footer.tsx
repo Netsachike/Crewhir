@@ -1,9 +1,10 @@
-import { Link } from 'react-router'
+import { Link } from '@/lib/router'
 import { Logo } from '@/components/brand/logo'
 import { Container } from '@/components/ui/layout'
 import { COMPANY, LEGAL_LINKS, LINKS, NAV, SITE } from '@/lib/site'
 
-const linkClass = 'inline-flex min-h-11 items-center text-small text-foam-2 transition-colors duration-200 hover:text-foam'
+const linkClass =
+  'inline-flex min-h-11 items-center text-small text-foam-2 transition-colors duration-200 hover:text-foam'
 
 export function Footer() {
   return (

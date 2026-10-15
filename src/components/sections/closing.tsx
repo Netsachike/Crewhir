@@ -1,6 +1,7 @@
 import { ArrowUpRightIcon, CheckIcon, PlusIcon } from '@phosphor-icons/react'
 import { Accordion } from 'radix-ui'
-import { Link } from 'react-router'
+import { IntegrationLogo } from '@/components/brand/integration-logo'
+import { Link } from '@/lib/router'
 import { Button } from '@/components/ui/button'
 import { Container, Eyebrow, Section, SectionHeading } from '@/components/ui/layout'
 import { Reveal } from '@/components/ui/reveal'
@@ -41,7 +42,7 @@ export function Testimonials() {
 
 export function AskAi() {
   return (
-    <Section id="ask-ai" tone="sand" className="py-16 sm:py-20 lg:py-24" aria-labelledby="ask-ai-title">
+    <Section id="ask-ai" tone="sand" size="md" aria-labelledby="ask-ai-title">
       <Container className="flex flex-col items-center text-center">
         <h2 id="ask-ai-title" className="max-w-2xl text-section text-harbor">
           {askAi.title}
@@ -55,6 +56,7 @@ export function AskAi() {
             <li key={l.label}>
               <Button asChild variant="secondary">
                 <a href={l.href} target="_blank" rel="noopener">
+                  <IntegrationLogo slug={l.logo} size={18} />
                   {l.label}
                   <ArrowUpRightIcon size={16} aria-hidden="true" />
                   <span className="sr-only">(opens in a new tab)</span>
@@ -168,7 +170,7 @@ export function FinalCta() {
   return (
     <section className="pt-4 pb-20 sm:pb-24 lg:pb-32" aria-labelledby="final-cta-title">
       <Container>
-        <Reveal className="on-dark relative grain overflow-hidden rounded-panel bg-harbor px-6 py-16 text-center sm:px-12 lg:py-24">
+        <Reveal className="on-dark grain relative overflow-hidden rounded-panel bg-harbor px-6 py-16 text-center sm:px-12 lg:py-24">
           <svg
             viewBox="0 0 16 16"
             aria-hidden="true"

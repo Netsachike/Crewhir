@@ -1,5 +1,7 @@
 import { CheckIcon } from '@phosphor-icons/react'
+import { IntegrationLogo } from '@/components/brand/integration-logo'
 import { HeroChat } from '@/components/mockups/hero-chat'
+import { WORDMARKS } from '@/lib/assets'
 import { Button } from '@/components/ui/button'
 import { Container, Pill } from '@/components/ui/layout'
 import { hero, integrations, worksWith } from '@/content/home'
@@ -9,12 +11,16 @@ import { LINKS } from '@/lib/site'
 export function Hero() {
   return (
     <section id="top" className="pt-10 pb-16 sm:pt-16 lg:pt-20 lg:pb-24">
-      <Container className="grid items-center gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
+      <Container className="grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-12">
         <div>
           <Pill>
-            <span className="relative flex size-2" aria-hidden="true">
-              <span className="absolute inset-0 animate-ping rounded-full bg-brass opacity-60 motion-reduce:hidden" />
-              <span className="relative size-2 rounded-full bg-brass" />
+            <span className="flex -space-x-1" aria-hidden="true">
+              <span className="grid size-6 place-items-center rounded-full bg-white ring-1 ring-rope">
+                <IntegrationLogo slug="slack" size={14} />
+              </span>
+              <span className="grid size-6 place-items-center rounded-full bg-white ring-1 ring-rope">
+                <IntegrationLogo slug="teams" size={14} />
+              </span>
             </span>
             {hero.eyebrow}
           </Pill>
@@ -39,7 +45,9 @@ export function Hero() {
             </ul>
           )}
         </div>
-        <HeroChat summary={hero.previewSummary} />
+        <div className="min-w-0">
+          <HeroChat summary={hero.previewSummary} />
+        </div>
       </Container>
     </section>
   )
@@ -47,21 +55,34 @@ export function Hero() {
 
 const live = integrations.filter((i) => i.live)
 
-function Mark({ name }: { name: string }) {
-  // Official SVG marks go in src/assets/integrations/ (plan §2.6). Until they
-  // are added, the name is set in type rather than a redrawn logo.
+function Mark({ name, logo }: (typeof integrations)[number]) {
+  const wordmark = WORDMARKS.includes(logo)
   return (
-    <span className="inline-flex min-h-11 items-center rounded-full border border-rope bg-white px-5 text-small font-semibold whitespace-nowrap text-harbor">
-      {name}
+    <span className="inline-flex min-h-12 items-center gap-2.5 rounded-full border border-rope bg-white py-2 pr-5 pl-3 text-small font-semibold whitespace-nowrap text-harbor shadow-[0_1px_2px_rgb(13_31_28/0.05)]">
+      <IntegrationLogo slug={logo} size={wordmark ? 18 : 24} />
+      {!wordmark && name}
     </span>
   )
 }
 
-/** CSS-only marquee once there are enough live integrations, a static row before that. */
-export function WorksWith() {
-  const scroll = live.length >= 6
+function Track({ items, reverse }: { items: typeof live; reverse?: boolean }) {
   return (
-    <section id="works-with" aria-labelledby="works-with-label" className="border-y border-rope bg-white py-10">
+    <div className="marquee-mask overflow-hidden">
+      <div className={`marquee-track flex w-max gap-3 ${reverse ? 'animate-marquee-reverse' : 'animate-marquee'}`}>
+        {[...items, ...items].map((i, idx) => (
+          <Mark key={`${i.name}-${idx}`} {...i} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/** Two CSS-only marquee rows of official marks; a static row when there are only a few. */
+export function WorksWith() {
+  const scroll = live.length >= 8
+  const half = Math.ceil(live.length / 2)
+  return (
+    <section id="works-with" aria-labelledby="works-with-label" className="border-y border-rope bg-white py-12">
       <Container>
         <p id="works-with-label" className="text-center text-small font-medium text-slate">
           {worksWith.label}
@@ -72,17 +93,14 @@ export function WorksWith() {
           ))}
         </ul>
         {scroll ? (
-          <div className="marquee-mask mt-6 overflow-hidden" aria-hidden="true">
-            <div className="marquee-track flex w-max animate-marquee gap-3">
-              {[...live, ...live].map((i, idx) => (
-                <Mark key={`${i.name}-${idx}`} name={i.name} />
-              ))}
-            </div>
+          <div className="mt-7 flex flex-col gap-3" aria-hidden="true">
+            <Track items={live.slice(0, half)} />
+            <Track items={live.slice(half)} reverse />
           </div>
         ) : (
           <div className="mt-6 flex flex-wrap justify-center gap-3" aria-hidden="true">
             {live.map((i) => (
-              <Mark key={i.name} name={i.name} />
+              <Mark key={i.name} {...i} />
             ))}
           </div>
         )}

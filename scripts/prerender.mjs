@@ -12,11 +12,26 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const dist = join(root, 'dist')
 const serverDir = join(root, 'dist-server')
 
-const { render, ROUTE_META, NOT_FOUND_META, SITE, SITE_URL } = await import(
+const { render, pageFor, ROUTE_META, NOT_FOUND_META, SITE, SITE_URL } = await import(
   pathToFileURL(join(serverDir, 'entry-server.js')).href
 )
 
 const template = await readFile(join(dist, 'index.html'), 'utf8')
+const manifest = JSON.parse(await readFile(join(dist, '.vite', 'manifest.json'), 'utf8'))
+
+/** modulepreload links for a page chunk and the shared chunks it imports. */
+function preloads(page) {
+  const seen = new Set()
+  const walk = (key) => {
+    const entry = manifest[key]
+    if (!entry || seen.has(entry.file)) return
+    seen.add(entry.file)
+    entry.imports?.forEach(walk)
+  }
+  walk(`src/pages/${page}.tsx`)
+  const already = new Set([...template.matchAll(/(?:src|href)="\/([^"]+\.js)"/g)].map((m) => m[1]))
+  return [...seen].filter((f) => !already.has(f)).map((f) => `<link rel="modulepreload" crossorigin href="/${f}" />`)
+}
 const indexable = !process.env.VERCEL_ENV || process.env.VERCEL_ENV === 'production'
 
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -41,6 +56,7 @@ function head(meta, { canonical = true } = {}) {
     `<meta name="twitter:title" content="${esc(meta.title)}" />`,
     `<meta name="twitter:description" content="${esc(meta.description)}" />`,
     `<meta name="twitter:image" content="${image}" />`,
+    ...preloads(pageFor(meta.path)),
     ...meta.jsonLd.map((o) => `<script type="application/ld+json">${json(o)}</script>`),
   ]
     .filter(Boolean)
@@ -52,11 +68,13 @@ function page(meta, html, opts) {
     .replace(/<title>[\s\S]*?<\/title>/, `<title>${esc(meta.title)}</title>`)
     .replace(/(<meta\s+name="description"\s+content=")[^"]*(")/, `$1${esc(meta.description)}$2`)
     .replace('<!--app-head-->', head(meta, opts))
+    .replace('<div id="root">', `<div id="root" data-path="${meta.path}">`)
     .replace('<!--app-html-->', html)
 }
 
 for (const meta of ROUTE_META) {
-  const file = meta.path === '/' ? join(dist, 'index.html') : join(dist, meta.path.slice(1), 'index.html')
+  // `/terms-of-service` → terms-of-service.html, which Vercel's cleanUrls serves.
+  const file = join(dist, meta.path === '/' ? 'index.html' : `${meta.path.slice(1)}.html`)
   await mkdir(dirname(file), { recursive: true })
   await writeFile(file, page(meta, render(meta.path)))
   console.log(`prerendered ${meta.path}`)
@@ -80,3 +98,4 @@ await writeFile(
 console.log(`wrote robots.txt (${indexable ? 'indexable' : 'noindex'}) and sitemap.xml`)
 
 await rm(serverDir, { recursive: true, force: true })
+await rm(join(dist, '.vite'), { recursive: true, force: true })

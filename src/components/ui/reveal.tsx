@@ -1,5 +1,5 @@
 import { useRef, type ReactNode } from 'react'
-import { drawTick, EASE, gsap, MOTION_OK, useGSAP } from '@/lib/gsap'
+import { useMotion } from '@/lib/motion'
 
 /**
  * Fades and lifts its `[data-anim="in"]` descendants in once, staggered, when
@@ -19,23 +19,13 @@ export function Reveal({
 }) {
   const ref = useRef<HTMLElement>(null)
 
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia()
-      mm.add(MOTION_OK, () => {
-        const root = ref.current!
-        const items = root.querySelectorAll('[data-anim="in"]')
-        const ticks = root.querySelectorAll('[data-anim="tick"] path')
-        const tl = gsap.timeline({ scrollTrigger: { trigger: root, start: 'top 70%', once: true } })
-        if (items.length) {
-          tl.fromTo(items, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.6, ease: EASE, stagger })
-        }
-        if (ticks.length) drawTick(tl, ticks, items.length ? '-=0.3' : 0)
-      })
-      return () => mm.revert()
-    },
-    { scope: ref },
-  )
+  useMotion(ref, ({ gsap, drawTick, EASE }, root) => {
+    const items = root.querySelectorAll('[data-anim="in"]')
+    const ticks = root.querySelectorAll('[data-anim="tick"] path')
+    const tl = gsap.timeline({ scrollTrigger: { trigger: root, start: 'top 70%', once: true } })
+    if (items.length) tl.fromTo(items, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.6, ease: EASE, stagger })
+    if (ticks.length) drawTick(tl, ticks, items.length ? '-=0.3' : 0)
+  })
 
   return (
     <Tag ref={ref as never} className={className}>

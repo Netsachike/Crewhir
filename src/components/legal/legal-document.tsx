@@ -1,6 +1,6 @@
 import { CaretDownIcon, LinkSimpleIcon } from '@phosphor-icons/react'
 import { Fragment, useEffect, useState, type ReactNode } from 'react'
-import { Link, NavLink } from 'react-router'
+import { Link, NavLink } from '@/lib/router'
 import { Logo } from '@/components/brand/logo'
 import { Footer } from '@/components/layout/footer'
 import { Button } from '@/components/ui/button'
@@ -26,7 +26,11 @@ function Linkify({ text }: { text: string }) {
         if (i % 2 === 0) return <Fragment key={i}>{part}</Fragment>
         const href = part.includes('@') && !part.startsWith('http') ? `mailto:${part}` : part
         return (
-          <a key={i} href={href} className="font-medium break-words text-crew underline underline-offset-4 hover:text-crew-deep">
+          <a
+            key={i}
+            href={href}
+            className="font-medium break-words text-crew underline underline-offset-4 hover:text-crew-deep"
+          >
             {part}
           </a>
         )
@@ -61,7 +65,10 @@ function LegalHeader() {
         <Link to="/" aria-label="Crewhir home" className="-m-1 rounded-lg p-1">
           <Logo />
         </Link>
-        <nav aria-label="Legal documents" className="order-3 -mx-3 w-full overflow-x-auto md:order-none md:mx-0 md:w-auto">
+        <nav
+          aria-label="Legal documents"
+          className="order-3 -mx-3 w-full overflow-x-auto md:order-none md:mx-0 md:w-auto"
+        >
           <ul className="flex">
             {LEGAL_LINKS.map((l) => (
               <li key={l.href}>
@@ -110,7 +117,9 @@ export function LegalDocument({ doc }: { doc: Doc }) {
     const headings = toc.map((t) => document.getElementById(t.id)).filter((el): el is HTMLElement => !!el)
     const observer = new IntersectionObserver(
       (entries) => {
-        const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
         if (visible[0]) setActive(visible[0].target.id)
       },
       { rootMargin: '-80px 0px -70% 0px' },
@@ -120,7 +129,9 @@ export function LegalDocument({ doc }: { doc: Doc }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [doc.slug])
 
-  const updated = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(doc.lastUpdated))
+  const updated = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone: 'UTC' }).format(
+    new Date(doc.lastUpdated),
+  )
 
   return (
     <>
