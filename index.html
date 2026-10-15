@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#F6F4EE" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="apple-touch-icon" href="/apple-icon.png" />
+    <title>Crewhir: the AI teammate in Slack and Microsoft Teams</title>
+    <meta
+      name="description"
+      content="Crewhir is an AI teammate that lives in Slack and Microsoft Teams. Connect your tools, ask in plain words, and get finished work back: reports, dashboards, code and campaigns."
+    />
+    <!--app-head-->
+    <script>
+      // Hides animated mockup parts until GSAP plays them. If the app hasn't
+      // started within 4s, show everything rather than leave it hidden.
+      document.documentElement.classList.add('js')
+      setTimeout(function () {
+        if (!window.__crewhirReady) document.documentElement.classList.remove('js')
+      }, 4000)
+    </script>
+  </head>
+  <body>
+    <div id="root"><!--app-html--></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
